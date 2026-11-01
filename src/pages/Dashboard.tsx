@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Store, Truck, DollarSign, Package, Users, AlertTriangle, ClipboardList } from 'lucide-react';
-import { supabase } from '../lib/supabase';
-import { Link } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
-import { PRODUCT_TYPES, OCCASIONS, Product } from '../types';
-import { AuthModal } from '../components/AuthModal';
+import { AlertTriangle, ClipboardList, DollarSign, Package, Store, Truck, Users } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+import { OCCASIONS, Product, PRODUCT_TYPES } from '../types';
 
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────

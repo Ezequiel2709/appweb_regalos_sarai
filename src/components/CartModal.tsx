@@ -1,19 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { ShoppingBag, Store, Truck, Smartphone, CreditCard, Gift, DollarSign, Package, Users, AlertTriangle, ClipboardList, Cake, Search, MapPin, Clock, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { supabase } from '../lib/supabase';
-import { Link, BrowserRouter, Routes, Route } from 'react-router-dom';
-import type { User } from '@supabase/supabase-js';
-import { PRODUCT_TYPES, OCCASIONS, OCCASION_IMAGES, Product, CartItem, CheckoutStep, ActiveSection } from '../types';
-import { fmtPrice, Stars, StockBadge } from '../lib/helpers';
-import { ProductCard } from '../components/ProductCard';
-import { CartModal } from '../components/CartModal';
-import { CheckoutModal } from '../components/CheckoutModal';
-import { MegaMenu } from '../components/MegaMenu';
-import { AuthModal } from '../components/AuthModal';
-import { Storefront } from '../pages/Storefront';
-import { Dashboard } from '../pages/Dashboard';
-
+import { ShoppingBag } from 'lucide-react';
+import { fmtPrice } from '../lib/helpers';
+import { CartItem } from '../types';
 // ─── Cart Modal ───────────────────────────────────────────────────────────────
 
 export function CartModal({ items, onClose, onQtyChange, onRemove, onCheckout }: {

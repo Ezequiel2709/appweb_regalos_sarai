@@ -1,11 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { ShoppingBag, Store, Truck, Smartphone, CreditCard, Gift, DollarSign, Package, Users, AlertTriangle, ClipboardList, Cake, Search, MapPin, Clock, Phone } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { supabase } from '../lib/supabase';
-import { Link, BrowserRouter, Routes, Route } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
-import { PRODUCT_TYPES, OCCASIONS, OCCASION_IMAGES, Product, CartItem, CheckoutStep, ActiveSection } from '../types';
-import { fmtPrice, Stars, StockBadge } from '../lib/helpers';
+import { CreditCard, Gift, Smartphone, Store, Truck } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { fmtPrice } from '../lib/helpers';
+import { supabase } from '../lib/supabase';
+import { CartItem, CheckoutStep } from '../types';
 // ─── Checkout ─────────────────────────────────────────────────────────────────
 
 export function CheckoutModal({ items, user, userAddresses = [], onClose, onComplete }: {
@@ -17,11 +15,11 @@ export function CheckoutModal({ items, user, userAddresses = [], onClose, onComp
 }) {
   const [step, setStep] = useState<CheckoutStep>('delivery')
   const [deliveryType, setDeliveryType] = useState<'pickup' | 'home'>('home')
-  const [details, setDetails] = useState({ 
-    name: user?.user_metadata?.name || '', 
-    phone: user?.user_metadata?.phone || '', 
-    address: '', 
-    dedication: '' 
+  const [details, setDetails] = useState({
+    name: user?.user_metadata?.name || '',
+    phone: user?.user_metadata?.phone || '',
+    address: '',
+    dedication: ''
   })
   const [payMethod, setPayMethod] = useState<'qr' | 'card'>('qr')
   const [cardDetails, setCardDetails] = useState({ number: '', cvv: '', expiry: '' })
@@ -65,6 +63,9 @@ export function CheckoutModal({ items, user, userAddresses = [], onClose, onComp
   const shipping = deliveryType === 'home' ? 20 : 0
   const total = subtotal + shipping
 
+  const currentHour = new Date().getHours()
+  const isOutOfHours = currentHour < 7 || currentHour >= 22
+
   const STEPS: CheckoutStep[] = ['delivery', 'details', 'payment', 'confirmation']
   const stepIdx = STEPS.indexOf(step)
   const STEP_LABELS = ['Entrega', 'Datos', 'Pago', 'Confirmado']
@@ -91,6 +92,11 @@ export function CheckoutModal({ items, user, userAddresses = [], onClose, onComp
 
         {/* Body */}
         <div className="flex-1 overflow-y-auto px-6 py-5">
+          {isOutOfHours && step !== 'confirmation' && (
+            <div className="bg-orange-50 border-l-4 border-orange-500 text-orange-800 p-4 mb-6 rounded-r-lg text-xs font-medium leading-relaxed">
+              <strong>🌙 Fuera de horario de atención:</strong> Nuestro local atiende de 7:00 am a 10:00 pm. Puedes completar tu compra ahora y procesaremos tu pedido a primera hora de la mañana.
+            </div>
+          )}
 
           {/* Step 1: Delivery */}
           {step === 'delivery' && (
@@ -139,8 +145,8 @@ export function CheckoutModal({ items, user, userAddresses = [], onClose, onComp
                   <label className="text-xs font-semibold text-[#78716C] uppercase tracking-wider block mb-2">Usar dirección guardada</label>
                   <div className="flex flex-wrap gap-2">
                     {userAddresses.map(addr => (
-                      <button 
-                        key={addr.id} 
+                      <button
+                        key={addr.id}
                         onClick={() => setDetails(prev => ({ ...prev, address: addr.address }))}
                         className="px-3 py-1.5 rounded-lg border border-[#EDE7DC] bg-[#F5F0E8] text-[#1C1917] text-xs font-medium hover:border-[#B5621E] transition-colors"
                       >
@@ -204,8 +210,8 @@ export function CheckoutModal({ items, user, userAddresses = [], onClose, onComp
                     <span className="text-sm text-[#78716C]">Total a pagar</span>
                     <span className="font-bold text-lg text-[#1C1917]">{fmtPrice(total)}</span>
                   </div>
-                  <button 
-                    onClick={handleSubmit} 
+                  <button
+                    onClick={handleSubmit}
                     disabled={isSubmitting}
                     className="w-full py-3 rounded-xl border-2 border-[#B5621E] text-white bg-[#B5621E] font-semibold text-sm hover:bg-[#8e4c16] hover:border-[#8e4c16] transition-colors disabled:opacity-50"
                   >
@@ -216,36 +222,36 @@ export function CheckoutModal({ items, user, userAddresses = [], onClose, onComp
                 <div className="space-y-3">
                   <div className="relative">
                     <label className="text-xs font-semibold text-[#78716C] uppercase tracking-wider block mb-1.5">Número de tarjeta</label>
-                    <input 
-                      value={cardDetails.number} 
-                      onChange={e => setCardDetails(d => ({ ...d, number: e.target.value.replace(/\D/g, '').replace(/(\d{4})/g, '$1 ').trim().substring(0, 19) }))} 
-                      placeholder="0000 0000 0000 0000" 
-                      className="w-full px-4 py-3 rounded-xl border border-[#EDE7DC] text-sm outline-none focus:border-[#B5621E] transition-colors placeholder-[#A8A29E]" 
+                    <input
+                      value={cardDetails.number}
+                      onChange={e => setCardDetails(d => ({ ...d, number: e.target.value.replace(/\D/g, '').replace(/(\d{4})/g, '$1 ').trim().substring(0, 19) }))}
+                      placeholder="0000 0000 0000 0000"
+                      className="w-full px-4 py-3 rounded-xl border border-[#EDE7DC] text-sm outline-none focus:border-[#B5621E] transition-colors placeholder-[#A8A29E]"
                     />
-                    {cardDetails.number.startsWith('4') ? <span className="absolute right-4 top-9 font-bold text-blue-800 italic text-xs">VISA</span> : 
-                     cardDetails.number.startsWith('5') ? <span className="absolute right-4 top-9 font-bold text-red-600 text-xs">MasterCard</span> : null}
+                    {cardDetails.number.startsWith('4') ? <span className="absolute right-4 top-9 font-bold text-blue-800 italic text-xs">VISA</span> :
+                      cardDetails.number.startsWith('5') ? <span className="absolute right-4 top-9 font-bold text-red-600 text-xs">MasterCard</span> : null}
                   </div>
                   <div className="flex gap-3">
                     <div className="flex-1">
                       <label className="text-xs font-semibold text-[#78716C] uppercase tracking-wider block mb-1.5">Vencimiento</label>
-                      <input 
-                        value={cardDetails.expiry} 
+                      <input
+                        value={cardDetails.expiry}
                         onChange={e => {
                           const v = e.target.value.replace(/\D/g, '');
-                          setCardDetails(d => ({ ...d, expiry: v.length >= 2 ? v.substring(0,2) + '/' + v.substring(2,4) : v }))
-                        }} 
-                        placeholder="MM/AA" 
-                        className="w-full px-4 py-3 rounded-xl border border-[#EDE7DC] text-sm outline-none focus:border-[#B5621E] transition-colors placeholder-[#A8A29E]" 
+                          setCardDetails(d => ({ ...d, expiry: v.length >= 2 ? v.substring(0, 2) + '/' + v.substring(2, 4) : v }))
+                        }}
+                        placeholder="MM/AA"
+                        className="w-full px-4 py-3 rounded-xl border border-[#EDE7DC] text-sm outline-none focus:border-[#B5621E] transition-colors placeholder-[#A8A29E]"
                       />
                     </div>
                     <div className="flex-1">
                       <label className="text-xs font-semibold text-[#78716C] uppercase tracking-wider block mb-1.5">CVV</label>
-                      <input 
+                      <input
                         type="password"
-                        value={cardDetails.cvv} 
-                        onChange={e => setCardDetails(d => ({ ...d, cvv: e.target.value.replace(/\D/g, '').substring(0, 4) }))} 
-                        placeholder="123" 
-                        className="w-full px-4 py-3 rounded-xl border border-[#EDE7DC] text-sm outline-none focus:border-[#B5621E] transition-colors placeholder-[#A8A29E]" 
+                        value={cardDetails.cvv}
+                        onChange={e => setCardDetails(d => ({ ...d, cvv: e.target.value.replace(/\D/g, '').substring(0, 4) }))}
+                        placeholder="123"
+                        className="w-full px-4 py-3 rounded-xl border border-[#EDE7DC] text-sm outline-none focus:border-[#B5621E] transition-colors placeholder-[#A8A29E]"
                       />
                     </div>
                   </div>

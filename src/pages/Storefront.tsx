@@ -1,19 +1,19 @@
-import { useState, useRef, useEffect } from 'react';
-import { ShoppingBag, Store, Truck, Smartphone, CreditCard, Gift, DollarSign, Package, Users, AlertTriangle, ClipboardList, Cake, Search, MapPin, Clock, Phone, Heart, Settings, LogOut } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { supabase } from '../lib/supabase';
 import type { User } from '@supabase/supabase-js';
-import { PRODUCT_TYPES, OCCASIONS, OCCASION_IMAGES, Product, CartItem, ActiveSection } from '../types';
-import { ProductCard } from '../components/ProductCard';
+import { motion } from 'framer-motion';
+import { Cake, Gift, Heart, LogOut, MapPin, Search, Settings, ShoppingBag, Smartphone, Truck } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { AboutSection } from '../components/AboutSection';
+import { AuthModal } from '../components/AuthModal';
 import { CartModal } from '../components/CartModal';
 import { CheckoutModal } from '../components/CheckoutModal';
+import { Footer } from '../components/Footer';
+import { LocationSection } from '../components/LocationSection';
 import { MegaMenu } from '../components/MegaMenu';
-import { AuthModal } from '../components/AuthModal';
-import { Link } from 'react-router-dom';
+import { ProductCard } from '../components/ProductCard';
 import { fmtPrice } from '../lib/helpers';
-
-
-// ─── Storefront ───────────────────────────────────────────────────────────────
+import { supabase } from '../lib/supabase';
+import { ActiveSection, CartItem, OCCASIONS, OCCASION_IMAGES, PRODUCT_TYPES, Product } from '../types';
 
 export function Storefront() {
   const [cart, setCart] = useState<CartItem[]>([])
@@ -431,72 +431,10 @@ export function Storefront() {
       )}
 
       {/* ── ABOUT ── */}
-      {activeSection === 'about' && (
-        <section className="py-16 px-4 md:px-8 max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-xs font-semibold uppercase tracking-widest text-[#B5621E] mb-2">Quiénes somos</p>
-            <h2 className="text-4xl font-bold text-[#1C1917]" style={{ fontFamily: "'Playfair Display', serif" }}>Nuestra historia</h2>
-          </div>
-          <div className="grid md:grid-cols-2 gap-10 items-center mb-12">
-            <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=600&h=500&fit=crop&auto=format" alt="Tienda de regalos" className="rounded-3xl w-full h-72 object-cover" />
-            <div>
-              <p className="text-[#78716C] leading-relaxed mb-4">
-                Nacimos en 2019 con una misión simple: hacer que regalar sea una experiencia memorable, no un trámite. Desde nuestra tienda en el corazón de la ciudad, hemos entregado miles de sonrisas.
-              </p>
-              <p className="text-[#78716C] leading-relaxed">
-                Seleccionamos cuidadosamente cada producto: juguetes, joyería, flores, chocolates, ropa y decoración. Todo con estándares de calidad premium y servicio de envoltura artesanal incluido.
-              </p>
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-6">
-            {[['1,800+', 'Pedidos entregados'], ['98%', 'Clientes satisfechos'], ['5 años', 'De experiencia']].map(([v, l]) => (
-              <div key={l} className="bg-white rounded-2xl p-6 text-center border border-[#EDE7DC]">
-                <p className="text-3xl font-bold text-[#B5621E]" style={{ fontFamily: "'Playfair Display', serif" }}>{v}</p>
-                <p className="text-xs text-[#78716C] mt-1">{l}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      {activeSection === 'about' && <AboutSection />}
 
       {/* ── LOCATION ── */}
-      {activeSection === 'location' && (
-        <section className="py-16 px-4 md:px-8 max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-xs font-semibold uppercase tracking-widest text-[#B5621E] mb-2">Encuéntranos</p>
-            <h2 className="text-4xl font-bold text-[#1C1917]" style={{ fontFamily: "'Playfair Display', serif" }}>Nuestra ubicación</h2>
-          </div>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="rounded-3xl overflow-hidden border border-[#EDE7DC]" style={{ height: 360 }}>
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3639.747184209057!2d-63.15607662483022!3d-17.594926283328146!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2s!5e1!3m2!1ses!2sbo!4v1791073788545!5m2!1ses!2sbo"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Ubicación de la tienda"
-              />
-            </div>
-            <div className="space-y-5">
-              {[
-                { icon: <MapPin className="w-6 h-6 text-[#1C1917]" />, label: 'Dirección', value: 'Av. Los Pinos 234, entre 6 de Agosto y Ecuador\nZona Sopocachi, La Paz, Bolivia' },
-                { icon: <Clock className="w-6 h-6 text-[#1C1917]" />, label: 'Horarios', value: 'Lun – Vie: 9:00 am – 7:00 pm\nSábado: 9:00 am – 6:00 pm\nDomingo: 10:00 am – 3:00 pm' },
-                { icon: <Phone className="w-6 h-6 text-[#1C1917]" />, label: 'Contacto', value: '+591 2 2441234\nWhatsApp: +591 69254989' },
-              ].map(item => (
-                <div key={item.label} className="flex gap-4 bg-white rounded-2xl p-5 border border-[#EDE7DC]">
-                  <span className="flex-shrink-0">{item.icon}</span>
-                  <div>
-                    <p className="font-semibold text-sm text-[#1C1917] mb-1">{item.label}</p>
-                    <p className="text-sm text-[#78716C] whitespace-pre-line">{item.value}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {activeSection === 'location' && <LocationSection />}
 
       {/* ── PROFILE ── */}
       {activeSection === 'profile' && user && (
@@ -652,45 +590,13 @@ export function Storefront() {
       )}
 
       {/* Footer */}
-      <footer className="border-t border-[#D6CFC6] py-12 px-4 md:px-8 mt-16" style={{ backgroundColor: '#1C1917' }}>
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
-          <div>
-            <p className="text-2xl font-bold mb-3" style={{ fontFamily: "'Playfair Display', serif", color: 'white' }}>
-              Tienda<span style={{ color: '#D4843C' }}>Regalo</span>
-            </p>
-            <p className="text-sm text-[#78716C] leading-relaxed">Tu destino de regalos únicos y memorables. Calidad, creatividad y entrega a domicilio.</p>
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: '#D4843C' }}>Tipos</p>
-            <ul className="space-y-2.5">
-              {PRODUCT_TYPES.slice(0, 4).map(t => (
-                <li key={t}><button onClick={() => applyFilter('type', t)} className="text-sm text-[#78716C] hover:text-white transition-colors text-left">{t}</button></li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: '#D4843C' }}>Ocasiones</p>
-            <ul className="space-y-2.5">
-              {OCCASIONS.slice(0, 4).map(o => (
-                <li key={o}><button onClick={() => applyFilter('occasion', o)} className="text-sm text-[#78716C] hover:text-white transition-colors text-left">{o}</button></li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: '#D4843C' }}>Ayuda</p>
-            <ul className="space-y-2.5">
-              <li><button onClick={() => { if(user) { setProfileTab('orders'); setActiveSection('profile') } else setAuthModalOpen(true) }} className="text-sm text-[#78716C] hover:text-white transition-colors text-left">Rastrear pedido</button></li>
-              <li><a href="mailto:soporte@tiendaregalo.com" className="text-sm text-[#78716C] hover:text-white transition-colors">Contacto</a></li>
-            </ul>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto mt-10 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-[#57534E]">© 2026 TiendaRegalo. Todos los derechos reservados.</p>
-          <div className="flex gap-4">
-            {['QR', 'Tarjeta', 'Transferencia'].map(p => <span key={p} className="text-xs px-2.5 py-1 rounded border border-white/10 text-[#78716C]">{p}</span>)}
-          </div>
-        </div>
-      </footer>
+      <Footer
+        applyFilter={applyFilter}
+        user={user}
+        setProfileTab={setProfileTab}
+        setActiveSection={setActiveSection}
+        setAuthModalOpen={setAuthModalOpen}
+      />
 
       {/* Modals */}
       {cartOpen && !checkoutOpen && (
@@ -705,6 +611,28 @@ export function Storefront() {
         }} />
       )}
       {authModalOpen && <AuthModal onClose={() => setAuthModalOpen(false)} />}
+
+      {/* Botón flotante de TikTok */}
+      <div className="fixed bottom-6 right-6 z-40 group">
+        <div className="absolute -inset-2 bg-gradient-to-tr from-[#25F4EE] to-[#FE2C55] rounded-full blur-md opacity-60 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
+        <a
+          href="https://www.tiktok.com/@every.occasin"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="relative bg-black text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform"
+          title="Síguenos en TikTok"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3V0Z" />
+          </svg>
+        </a>
+      </div>
     </div>
   )
 }

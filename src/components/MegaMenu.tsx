@@ -1,8 +1,6 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { PRODUCT_TYPES, OCCASIONS } from '../types';
+import { OCCASIONS, PRODUCT_TYPES } from '../types';
 
-// ─── Mega Menu ────────────────────────────────────────────────────────────────
 
 export function MegaMenu({ onClose, onFilter }: { onClose: () => void; onFilter: (type: string, value: string) => void }) {
   return (

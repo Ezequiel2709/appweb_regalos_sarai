@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { ShoppingBag, Heart } from 'lucide-react';
-import { Product } from '../types';
+import { Heart } from 'lucide-react';
+import { useState } from 'react';
 import { fmtPrice, Stars, StockBadge } from '../lib/helpers';
+import { Product } from '../types';
 
 // ─── Product Card ─────────────────────────────────────────────────────────────
 
@@ -26,8 +26,8 @@ export function ProductCard({ product, isLiked, onToggleLike, onAdd }: { product
           </div>
         )}
         {onToggleLike && (
-          <button 
-            onClick={(e) => { e.stopPropagation(); onToggleLike(product); }} 
+          <button
+            onClick={(e) => { e.stopPropagation(); onToggleLike(product); }}
             className="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur-sm rounded-full hover:bg-white transition-all shadow-sm"
           >
             <Heart className={`w-4 h-4 transition-colors ${isLiked ? 'fill-[#B5621E] text-[#B5621E]' : 'text-[#78716C] hover:text-[#B5621E]'}`} />
