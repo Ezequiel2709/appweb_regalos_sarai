@@ -5,7 +5,7 @@ import { Dashboard } from './pages/Dashboard';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/appweb_regalos_sarai">
       <Routes>
         <Route path="/" element={<Storefront />} />
         <Route path="/admin" element={<Dashboard />} />
