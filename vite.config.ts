@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/tienda-regalos/',
+  base: '/appweb_regalos_sarai/',
   plugins: [react(), tailwindcss()],
   server: {
     port: 8443,
