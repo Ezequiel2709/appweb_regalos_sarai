@@ -15,7 +15,7 @@ export function Footer({
   setAuthModalOpen: (o: boolean) => void;
 }) {
   return (
-    <footer className="border-t border-[#D6CFC6] py-12 px-4 md:px-8 mt-16" style={{ backgroundColor: '#9a5628ff' }}>
+    <footer className="border-t border-[#D6CFC6] py-12 px-4 md:px-8 mt-16" style={{ backgroundColor: '#382417' }}>
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
         <div>
           <p className="text-2xl font-bold mb-3" style={{ fontFamily: "'Playfair Display', serif", color: 'white' }}>
